@@ -328,6 +328,44 @@ Rule-based system that analyzes user booking history:
 | Documentation & presentation  | ✅     |
 
 ---
+##  Architecture
+
+```
+┌─────────────────────────────────────────┐
+│           Frontend (React)              │
+│  Login │ Dashboard │ Booking │ Admin    │
+└──────────────────┬──────────────────────┘
+                   │ HTTP/REST (Axios)
+┌──────────────────▼──────────────────────┐
+│          Backend (Node.js/Express)      │
+│                                         │
+│  /api/auth      → Authentication        │
+│  /api/appointments → Booking CRUD       │
+│  /api/services  → Service Management   │
+│  /api/reviews   → Feedback System      │
+│  /api/recommendations → AI Engine      │
+│  /api/ai        → Chatbot              │
+│  /api/admin     → Analytics            │
+└────────┬─────────────────┬─────────────┘
+         │                 │
+┌────────▼──────┐  ┌───────▼──────────────┐
+│  PostgreSQL   │  │   OpenRouter API      │
+│               │  │   (AI Chatbot)        │
+│  • users      │  │   Llama 3.2 Model    │
+│  • services   │  └──────────────────────┘
+│  • appointments│
+│  • reviews    │
+│  • rec_history│
+└───────────────┘
+```
+
+### Request Flow
+1. User interacts with React frontend
+2. Axios sends HTTP request with JWT token
+3. Express middleware validates token + role
+4. Controller queries PostgreSQL database
+5. Response returned as JSON to frontend
+6. React updates UI with new data
 
 ##  License
 
