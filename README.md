@@ -234,6 +234,34 @@ npm run dev
 
 ##  Database Design
 
+### ER Diagram
+![ER Diagram](docs/er-diagram.png)
+### Table Descriptions
+
+| Table | Description |
+|-------|-------------|
+| **users** | Stores customer and admin accounts with role-based access |
+| **services** | Available appointment services with pricing and duration |
+| **appointments** | Booking records linking users to services with date/time/status |
+| **reviews** | User feedback and star ratings for completed appointments |
+| **recommendation_history** | Tracks user preferences for AI recommendation engine |
+
+### Relationships
+
+- **USERS → APPOINTMENTS** — One user can book many appointments
+- **SERVICES → APPOINTMENTS** — One service can have many appointments
+- **APPOINTMENTS → REVIEWS** — One appointment can have one review
+- **USERS → REVIEWS** — One user can write many reviews
+- **USERS → RECOMMENDATION_HISTORY** — One user generates many recommendation records
+- **SERVICES → RECOMMENDATION_HISTORY** — One service appears in many recommendation records
+
+### Key Design Decisions
+
+- **UUID** primary keys for security and scalability
+- **Soft delete** on services (`is_active = false`) to preserve booking history
+- **Status enum** on appointments: `pending → confirmed → completed / cancelled`
+- **Unique constraint** on reviews per appointment (one review per appointment)
+- **Indexes** on `user_id`, `appointment_date`, `status` for fast queries
 ### Tables
 
 **users**
